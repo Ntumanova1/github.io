@@ -103,26 +103,15 @@
     </div>
 
     <script>
-        // Счетчики голосов
-        const votes = {
-            analytics: 0,
-            science: 0
-        };
+        // Загрузка сохраненных голосов из localStorage
+        const votes = JSON.parse(localStorage.getItem('pollResults')) || { analytics: 0, science: 0 };
 
-        // Сохранение результатов в localStorage
+        // Функция сохранения результатов голосования в localStorage
         function saveResults() {
             localStorage.setItem('pollResults', JSON.stringify(votes));
         }
 
-        // Загрузка результатов из localStorage
-        function loadResults() {
-            const savedVotes = localStorage.getItem('pollResults');
-            if (savedVotes) {
-                Object.assign(votes, JSON.parse(savedVotes));
-            }
-        }
-
-        // Отображение результатов
+        // Функция отображения результатов
         function displayResults(message) {
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = `
@@ -134,7 +123,7 @@
             `;
         }
 
-        // Отправка теста
+        // Функция обработки и подсчета результатов теста
         function submitQuiz() {
             const form = document.getElementById('quizForm');
             const formData = new FormData(form);
@@ -158,12 +147,14 @@
                 message = 'Вы можете выбрать любую из этих профессий!';
             }
 
-            saveResults(); // Сохраняем результаты
+            saveResults(); // Сохраняем результаты в localStorage
             displayResults(message); // Отображаем результаты
         }
 
-        // Загрузка сохраненных данных при старте
-        window.onload = loadResults;
+        // Показать сохраненные результаты при загрузке страницы
+        window.onload = function () {
+            displayResults('Начните тест, чтобы узнать свои результаты!');
+        };
     </script>
 </body>
 </html>
